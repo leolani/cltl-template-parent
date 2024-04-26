@@ -126,18 +126,10 @@ rm main.zip
 mv cltl-template-main "${name}-app"
 
 cd "${name}-app"
-./init_component.sh -n "${name}-app" --remote "$remote_app" --namespace "${name}"
+./init_component.sh -n "${name}-app" --namespace "${name}"
 git add .
 git commit -m "Setup application for ${name}"
-git push --set-upstream origin main
 cd ..
-
-git add .
-git commit -m "Add ${name}-app"
-git remote add origin $remote_parent
-git push --set-upstream origin main
-
-git submodule update --init --recursive
 
 #####################################################
 #### Copy Python application
@@ -151,37 +143,40 @@ cp "$base_dir/template-app/makefile" makefile
 cp "$base_dir/template-app/setup.py" setup.py
 cp "$base_dir/template-app/requirements.txt" requirements.txt
 
-git add .
-git commit -m "Add application"
-git push
-
 cd ..
 git add .
 git commit -m "Add application"
-git push
 
 
 #####################################################
 #### Change component names in makefiles and setup.py
 #####################################################
 
-echo "RENAME template-app in makefile and ${name}"-app/makefile"
-echo "RENAME package name in ${name}"-app/setup.py"
-exit 0
+echo "RENAME template-app in makefile and ${name}-app/makefile"
+echo "RENAME package name in ${name}-app/setup.py"
 
-cd ${name}-app"
+cd "${name}-app"
 sed -i '.bak' 's/template-app/"${name}"-app/g' makefile
 rm makefile.bak
 sed -i '.bak' 's/template-app/"${name}"-app/g' setup.py
 rm setup.py.bak
 git add .
 git commit -m "Adjust names"
-git push
 cd ..
 
 sed -i '.bak' 's/template-app/"${name}"-app/g' makefile
 rm makefile.bak
 git add .
-git commit -m "Adjust names"l
-git push
+git commit -m "Adjust names"
 
+
+#####################################################
+#### Setup origin and push
+#####################################################
+
+git remote add origin $remote_parent
+echo "Run"
+echo ""
+echo "git push --set-upstream origin main"
+echo ""
+echo "to push your changes"
