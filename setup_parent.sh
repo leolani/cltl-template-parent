@@ -54,18 +54,11 @@ fi
 echo "Setup parent repository for name with remote $remote in $destination"
 
 remote_parent="$remote/${name}-parent"
-remote_app="$remote/${name}-app"
 
 if curl -ILs "$remote_parent" | tac | grep -m1 HTTP | grep 404; then
   echo "$remote_parent does not exist, goto GitHub and setup $remote_parent as empty repository!"
   exit 0
 fi
-
-if curl -ILs "$remote_app" | tac | grep -m1 HTTP | grep 404; then
-  echo "$remote_app does not exist, goto GitHub and setup $remote_app as empty repository!"
-  exit 0
-fi
-
 
 #####################################################
 #### Setup parent git repository
@@ -127,15 +120,17 @@ git commit -m "Add submodules"
 #####################################################
 
 echo "Add ${name}-app"
-git submodule add -b main --name "${name}-app" "https://github.com/leolani/cltl-template.git" "${name}-app"
+wget https://github.com/leolani/cltl-template/archive/main.zip
+unzip main.zip
+rm main.zip
+mv cltl-template-main "${name}-app"
+
 cd "${name}-app"
 ./init_component.sh -n "${name}-app" --remote "$remote_app" --namespace "${name}"
 git add .
 git commit -m "Setup application for ${name}"
 git push --set-upstream origin main
 cd ..
-
-git submodule set-url "${name}-app" "$remote_app"
 
 git add .
 git commit -m "Add ${name}-app"
