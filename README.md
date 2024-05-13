@@ -1,12 +1,12 @@
-# Parent repository for the Leolani workshop
+# Parent repository for Leolani
 
-This repository contains a demo application for the Leolani workshop.
+This repository contains a demo application for Leolani.
 
 ## Check-out
 
 To check out all code needed for the Leolani App, clone this repository including all submodules:
 
-        git clone --recurse-submodules -j8 https://github.com/leolani/workshop-parent.git
+        git clone --recurse-submodules -j8 https://github.com/leolani/cltl-template-parent.git
 
 Update to the latest branch heads of the submodules:
 
@@ -30,9 +30,9 @@ Checkout the repository as described in [Check-out](#check-out). Then go to the 
 activate the virtual environment for the Python application and run it. Altogether:
 
         git clone --recurse-submodules -j8 https://github.com/leolani/leolani-mmai-parent.git
-        cd workshop-parent
+        cd template-parent
         make build
-        cd workshop-app
+        cd template-app
         source venv/bin/activate
         cd py-app
         python app.py
@@ -54,14 +54,14 @@ Starting from this repository you can setup your own application:
   * add the used components as git submodules to the parent
   * create an application from cltl-template
   * we set up the application from this repository
-  * Adjust the `workshop` name of your project in
+  * Adjust the `template` name of your project in
     * project-dependencies of myproject-parent/makefile
     * project-dependencies of myproject-parent/myproject-app/makefile
     * name in parent/project-app/setup.py
 
 This will provide you with an identical setup to this application, though using your project name.
 
-To add your own modules, for simplicity place them in `myproject-parent/src` in the `workshop` and `workshop_parent`
+To add your own modules, for simplicity place them in `myproject-parent/src` in the `template` and `template_parent`
 namespaces. Like this you do not need to add additional git submodules. If you want to try that, you can move the code
 at any point.
 
