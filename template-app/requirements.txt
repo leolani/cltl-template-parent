@@ -1,6 +1,5 @@
 .[impl, service]
 
-cltl.backend[impl,host,service]
-cltl.context[service]
-cltl.emissor-data[impl,service,client]
+emissor
+cltl.emissor-data[service,client]
 cltl.chat-ui[service]

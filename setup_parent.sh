@@ -41,10 +41,15 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Validate if required options are provided
-if [ -z "$name" ] || [ -z "$remote" ] || [ -z "$destination" ]; then
-  usage=
+if [ -z "$name" ] || [ -z "$destination" ]; then
+  usage
   exit 1
 fi
+## Validate if required options are provided
+#if [ -z "$name" ] || [ -z "$remote" ] || [ -z "$destination" ]; then
+#  usage=
+#  exit 1
+#fi
 
 
 #####################################################
@@ -53,12 +58,12 @@ fi
 
 echo "Setup parent repository for name with remote $remote in $destination"
 
-remote_parent="$remote/${name}-parent"
-
-if curl -ILs "$remote_parent" | tac | grep -m1 HTTP | grep 404; then
-  echo "$remote_parent does not exist, goto GitHub and setup $remote_parent as empty repository!"
-  exit 0
-fi
+#remote_parent="$remote/${name}-parent"
+#
+#if curl -ILs "$remote_parent" | tac | grep -m1 HTTP | grep 404; then
+#  echo "$remote_parent does not exist, goto GitHub and setup $remote_parent as empty repository!"
+#  exit 0
+#fi
 
 #####################################################
 #### Setup parent git repository
@@ -74,6 +79,8 @@ echo "Setup basic files repository"
 echo "# Parent repository for $name" > "$destination/README.md"
 echo "0.0.1dev" > "$destination/VERSION"
 cp "$base_dir/makefile" makefile
+sed -i '.bak' "s/<NAME>/${name}/g" makefile
+rm makefile.bak
 cp "$base_dir/.gitignore" .gitignore
 
 git add .
@@ -105,8 +112,6 @@ git submodule add -b main https://github.com/leolani/cltl-build.git cltl-require
 git submodule add -b main --name emissor https://github.com/leolani/emissor.git emissor
 git submodule add -b main --name util https://github.com/leolani/cltl-build.git util
 git submodule add -b main --name cltl-combot https://github.com/leolani/cltl-combot.git cltl-combot
-git submodule add -b main --name cltl-backend https://github.com/leolani/cltl-backend.git cltl-backend
-git submodule add -b main --name cltl-context https://github.com/leolani/cltl-context.git cltl-context
 git submodule add -b main --name cltl-emissor-data https://github.com/leolani/cltl-emissor-data.git cltl-emissor-data
 git submodule add -b main --name cltl-chat-ui https://github.com/leolani/cltl-chat-ui.git cltl-chat-ui
 
@@ -127,9 +132,11 @@ mv cltl-template-main "${name}-app"
 
 cd "${name}-app"
 ./init_component.sh -n "${name}-app" --namespace "${name}"
+rm -rf util .gitmodules
 git add .
 git commit -m "Setup application for ${name}"
 cd ..
+git submodule add -b main https://github.com/leolani/cltl-build.git ${name}-app/util
 
 #####################################################
 #### Copy Python application
@@ -156,25 +163,27 @@ echo "RENAME template-app in makefile and ${name}-app/makefile"
 echo "RENAME package name in ${name}-app/setup.py"
 
 cd "${name}-app"
-sed -i '.bak' 's/template-app/"${name}"-app/g' makefile
+sed -i '.bak' "s/<NAME>/${name}/g" makefile
 rm makefile.bak
-sed -i '.bak' 's/template-app/"${name}"-app/g' setup.py
+sed -i '.bak' "s/<NAME>/${name}/g" setup.py
 rm setup.py.bak
+sed -i '.bak' "s/<NAME>/${name}/g" py-app/app.py
+rm py-app/app.py.bak
 git add .
 git commit -m "Adjust names"
 cd ..
 
-sed -i '.bak' 's/template-app/"${name}"-app/g' makefile
-rm makefile.bak
-git add .
-git commit -m "Adjust names"
+#sed -i '.bak' 's/template-app/"${name}"-app/g' makefile
+#rm makefile.bak
+#git add .
+#git commit -m "Adjust names"
 
 
 #####################################################
 #### Setup origin and push
 #####################################################
 
-git remote add origin $remote_parent
+#git remote add origin $remote_parent
 echo "Run"
 echo ""
 echo "git push --set-upstream origin main"

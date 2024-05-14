@@ -1,16 +1,14 @@
 SHELL = /bin/bash
 
-project_name ?= "workshop"
+project_name ?= "<NAME>"
 
 project_components = $(addprefix ${project_root}/, \
         emissor \
         cltl-requirements \
         cltl-combot \
-        cltl-backend \
-        cltl-context \
         cltl-emissor-data \
         cltl-chat-ui \
-        template-app)
+        <NAME>-app)
 
 git_local ?= ..
 git_remote ?= "https://github.com/leolani"

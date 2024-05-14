@@ -1,20 +1,15 @@
-# Numerics
-numpy==1.24.2
-matplotlib==3.7.1
-
-# Audio/Video
-clang==11.0
-PyAudio==0.2.13
-Pillow==8.0.1
-opencv-python==4.8.0.76
-pyobjc==9.2;sys_platform=='darwin'
-sounddevice==0.4.2
-soundfile==0.10.3.post1
-playsound==1.3.0
-
 # Utils
 cachetools==4.2.4
-fuzzywuzzy==0.18.0
+
+# Numerics
+numpy==1.24.2
+
+# Audio/Video
+# soundfile==0.10.3.post1
+# opencv-python==4.8.0.76
+
+# RDF support
+rdflib==6.1.1
 
 # REST/JSON/Messaging support
 Flask==1.1.2
